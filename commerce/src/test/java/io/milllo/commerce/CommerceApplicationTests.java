@@ -1,10 +1,10 @@
-package io.milllo.store;
+package io.milllo.commerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StoreApplicationTests {
+class CommerceApplicationTests {
 
 	@Test
 	void contextLoads() {
