@@ -15,7 +15,7 @@ public class ProductOrderRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // RowMapper: DB 결과 -> Customer 객체로 변환
+    // RowMapper: DB 결과 -> ProductOrder 객체로 변환
     private final RowMapper<ProductOrder> orderRowMapper = (rs, rowNum) -> new ProductOrder(
             rs.getInt("order_id"),
             rs.getInt("customer_id"),
