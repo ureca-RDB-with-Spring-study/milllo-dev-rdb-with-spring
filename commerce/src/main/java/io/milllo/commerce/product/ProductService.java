@@ -20,6 +20,11 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
     }
 
+    // READ
+    public List<Product> findByCategory(String categoryName) {
+        return productRepository.findByCategory(categoryName);
+    }
+
     // UPDATE
     public void update(Product product) {
         findById(product.getProductId());

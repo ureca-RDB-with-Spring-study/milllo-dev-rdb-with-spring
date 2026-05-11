@@ -22,7 +22,8 @@ public class ProductOrderRepository {
             rs.getInt("product_id"),
             rs.getInt("quantity"),
             rs.getTimestamp("order_date").toLocalDateTime(),
-            rs.getString("status")
+            rs.getString("status"),
+            rs.getInt("total_price")
     );
 
     //CREATE

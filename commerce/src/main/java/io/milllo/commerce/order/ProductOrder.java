@@ -18,4 +18,5 @@ public class ProductOrder {
     private Integer quantity;
     private LocalDateTime orderDate;
     private String status;
+    private Integer totalPrice;
 }

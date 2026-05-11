@@ -26,6 +26,7 @@ public class DataInitializer implements ApplicationRunner {
         insertCustomers(1000);
         insertProducts();
         insertOrders(100000);
+        insertCarts(5000);
         System.out.println("더미 데이터 적재 완료!");
     }
 
@@ -63,5 +64,18 @@ public class DataInitializer implements ApplicationRunner {
             });
         }
         jdbcTemplate.batchUpdate(sql, batchArgs);  // 한 번에 전송
+    }
+
+    private void insertCarts(int count) {
+        String sql = "INSERT INTO carts (customer_id, product_id, quantity) VALUES (?, ?, ?)";
+        List<Object[]> batchArgs = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            batchArgs.add(new Object[]{
+                    random.nextInt(1000) + 1,
+                    random.nextInt(5) + 1,
+                    random.nextInt(3) + 1
+            });
+        }
+        jdbcTemplate.batchUpdate(sql, batchArgs);
     }
 }

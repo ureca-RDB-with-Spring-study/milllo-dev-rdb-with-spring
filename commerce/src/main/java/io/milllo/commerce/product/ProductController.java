@@ -21,12 +21,17 @@ public class ProductController {
     }
 
     // READ
+    // 전체 또는 카테고리별 조회
+    // GET /products
+    // GET /products?category=노트북
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() { return ResponseEntity.ok(productService.findAll()); }
-
-    @GetMapping("/{productId}")
-    public ResponseEntity<Product> findById(@PathVariable int productId) {
-        return ResponseEntity.ok(productService.findById(productId));
+    public ResponseEntity<List<Product>> findAll(
+            @RequestParam(required = false) String category
+    ) {
+        if(category != null) {
+            return ResponseEntity.ok(productService.findByCategory(category));
+        }
+        return ResponseEntity.ok(productService.findAll());
     }
 
     // UPDATE

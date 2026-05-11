@@ -20,7 +20,8 @@ public class ProductRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getInt("price"),
-            rs.getInt("stock_quantity")
+            rs.getInt("stock_quantity"),
+            rs.getInt("category_id")
     );
 
     // CREATE
@@ -36,16 +37,45 @@ public class ProductRepository {
     }
 
     // READ
-    public List<Product> findAll() {
-        String query = "SELECT * FROM products";
-        return jdbcTemplate.query(query, productRowMapper);
-    }
-
-    // READ
     public Optional<Product> findById(int productId) {
         String query = "SELECT * FROM products WHERE product_id = ?";
         List<Product> result = jdbcTemplate.query(query, productRowMapper, productId);
         return result.stream().findFirst();
+    }
+
+    // READ - 전체 상품 목록(카테고리 이름 포함)
+    public List<Product> findAll() {
+        String query = """
+                SELECT
+                    p.product_id,
+                    p.name,
+                    p.price,
+                    p.stock_quantity,
+                    p.category_id,
+                    c.name AS category_name
+                FROM products p
+                INNER JOIN categories c ON p.category_id = c.category_id
+                ORDER BY p.name ASC
+                """;
+        return jdbcTemplate.query(query, productRowMapper);
+    }
+
+    // READ - 카테고리별 상품 목록
+    public List<Product> findByCategory(String categoryName) {
+        String query = """
+                SELECT
+                    p.product_id,
+                    p.name,
+                    p.price,
+                    p.stock_quantity,
+                    p.category_id,
+                    c.name AS category_name
+                FROM products p
+                INNER JOIN categories c ON p.category_id = c.category_id
+                WHERE c.name = ?
+                ORDER BY p.name ASC
+                """;
+        return jdbcTemplate.query(query, productRowMapper, categoryName);
     }
 
     // UPDATE
