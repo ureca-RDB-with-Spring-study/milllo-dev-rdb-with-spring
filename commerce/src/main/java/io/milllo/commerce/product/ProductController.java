@@ -25,7 +25,7 @@ public class ProductController {
     // GET /products
     // GET /products?category=노트북
     @GetMapping
-    public ResponseEntity<List<Product>> findAll(
+    public ResponseEntity<List<ProductResponseDto>> findAll(
             @RequestParam(required = false) String category
     ) {
         if(category != null) {

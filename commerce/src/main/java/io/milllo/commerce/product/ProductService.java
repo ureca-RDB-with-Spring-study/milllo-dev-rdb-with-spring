@@ -12,7 +12,7 @@ public class ProductService {
     public void add(Product product) { productRepository.save(product); }
 
     // READ
-    public List<Product> findAll() { return productRepository.findAll(); }
+    public List<ProductResponseDto> findAll() { return productRepository.findAll(); }
 
     // READ
     public Product findById(int productId) {
@@ -21,7 +21,7 @@ public class ProductService {
     }
 
     // READ
-    public List<Product> findByCategory(String categoryName) {
+    public List<ProductResponseDto> findByCategory(String categoryName) {
         return productRepository.findByCategory(categoryName);
     }
 

@@ -50,6 +50,24 @@ public class CustomerRepository {
         return result.stream().findFirst();
     }
 
+    // 장바구니에 담지 않은 고객 조회 (LEFT JOIN + IS NULL)
+    public List<CustomerResponseDto> findInactiveCustomers() {
+        String sql = """
+            SELECT
+                c.customer_id,
+                c.name,
+                c.email
+            FROM customers c
+            LEFT JOIN carts ca ON c.customer_id = ca.customer_id
+            WHERE ca.cart_id IS NULL
+            """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new CustomerResponseDto(
+                rs.getInt("customer_id"),
+                rs.getString("name"),
+                rs.getString("email")
+        ));
+    }
+
     //UPDATE
     public int update(Customer customer) {
         String query = "UPDATE customers SET name = ?, address = ? WHERE customer_id = ?";

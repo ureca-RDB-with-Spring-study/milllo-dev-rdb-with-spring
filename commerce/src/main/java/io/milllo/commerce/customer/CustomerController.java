@@ -33,6 +33,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.findById(customerId));
     }
 
+    // 장바구니에 담지 않은 고객 조회
+    @GetMapping("/inactive")
+    public ResponseEntity<List<CustomerResponseDto>> findInactiveCustomers() {
+        return ResponseEntity.ok(customerService.findInactiveCustomers());
+    }
+
     //UPDATE
     @PutMapping("/{customerId}")
     public ResponseEntity<String> update(@PathVariable int customerId, @RequestBody Customer customer) {

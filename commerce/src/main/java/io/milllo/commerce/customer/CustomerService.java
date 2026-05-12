@@ -28,6 +28,11 @@ public class CustomerService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고객입니다."));
     }
 
+    // 장바구니에 담지 않은 고객 조회
+    public List<CustomerResponseDto> findInactiveCustomers() {
+        return customerRepository.findInactiveCustomers();
+    }
+
     //UPDATE
     public void update(Customer customer) {
         findById(customer.getCustomerId()); // 존재여부 확인
