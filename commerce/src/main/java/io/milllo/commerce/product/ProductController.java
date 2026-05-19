@@ -34,6 +34,27 @@ public class ProductController {
         return ResponseEntity.ok(productService.findAll());
     }
 
+    // READ
+    // 전체 상품 평균값 이상 상품 조회 (서브쿼리)
+    @GetMapping("/above-average")
+    public ResponseEntity<List<ProductResponseDto>> findAboveAveragePrice() {
+        long start = System.currentTimeMillis();
+        List<ProductResponseDto> result = productService.findAboveAveragePrice();
+        long end = System.currentTimeMillis();
+        System.out.println("서브쿼리 실행시간 : " + (end - start) + "ms");
+        return ResponseEntity.ok(result);
+    }
+
+    // JOIN 방식 (성능 비교용)
+    @GetMapping("/above-average/join")
+    public ResponseEntity<List<ProductResponseDto>> findAboveAveragePriceWithJoin() {
+        long start = System.currentTimeMillis();
+        List<ProductResponseDto> result = productService.findAvoveAveragePriceWithJoin();
+        long end = System.currentTimeMillis();
+        System.out.println("JOIN 실행시간: " + (end - start) + "ms");
+        return ResponseEntity.ok(result);
+    }
+
     // UPDATE
     @PutMapping("/{productId}")
     public ResponseEntity<String> delete(@PathVariable int productId) {

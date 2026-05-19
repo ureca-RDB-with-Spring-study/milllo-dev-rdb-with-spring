@@ -25,6 +25,16 @@ public class ProductService {
         return productRepository.findByCategory(categoryName);
     }
 
+    // READ - 평균값 이상 상품 조회 (서브쿼리)
+    public List<ProductResponseDto> findAboveAveragePrice() {
+        return productRepository.findAboveAveragePrice();
+    }
+
+    // READ - 평균값 이상 상품 조회 (JOIN)
+    public List<ProductResponseDto> findAvoveAveragePriceWithJoin() {
+        return productRepository.findAvoveAveragePriceWithJoin();
+    }
+
     // UPDATE
     public void update(Product product) {
         findById(product.getProductId());

@@ -30,7 +30,6 @@ public class ProductRepository {
             rs.getString("description"),
             rs.getInt("price"),
             rs.getInt("stock_quantity"),
-            rs.getInt("category_id"),
             rs.getString("category_name")
     );
 
@@ -62,7 +61,6 @@ public class ProductRepository {
                     p.description,
                     p.price,
                     p.stock_quantity,
-                    p.category_id,
                     c.name AS category_name
                 FROM products p
                 INNER JOIN categories c ON p.category_id = c.category_id
@@ -80,7 +78,6 @@ public class ProductRepository {
                     p.description,
                     p.price,
                     p.stock_quantity,
-                    p.category_id,
                     c.name AS category_name
                 FROM products p
                 INNER JOIN categories c ON p.category_id = c.category_id
@@ -88,6 +85,43 @@ public class ProductRepository {
                 ORDER BY p.name ASC
                 """;
         return jdbcTemplate.query(query, productResponseDtoRowMapper, categoryName);
+    }
+
+    // READ - 평균 가격 이상 상품조회
+    // 서브쿼리 방식
+    public List<ProductResponseDto> findAboveAveragePrice() {
+        String query = """
+                SELECT
+                    p.product_id,
+                    p.name,
+                    p.description,
+                    p.price,
+                    p.stock_quantity,
+                    c.name AS category_name
+                FROM products p
+                INNER JOIN categories c ON p.category_id = c.category_id
+                WHERE p.price >= (SELECT AVG(price) FROM products)
+                """;
+        return jdbcTemplate.query(query, productResponseDtoRowMapper);
+    }
+
+    // JOIN 방식
+    public List<ProductResponseDto> findAvoveAveragePriceWithJoin() {
+        String query = """
+                SELECT
+                    p.product_id,
+                    p.name,
+                    p.description,
+                    p.price,
+                    p.stock_quantity,
+                    c.name AS category_name
+                FROM products p
+                INNER JOIN categories c ON p.category_id = c.category_id
+                INNER JOIN (
+                    SELECT AVG(price) AS avg_price FROM products
+                ) avg_p ON p.price >= avg_p.avg_price
+                """;
+        return jdbcTemplate.query(query, productResponseDtoRowMapper);
     }
 
     // UPDATE

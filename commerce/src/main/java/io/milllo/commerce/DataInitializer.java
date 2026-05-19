@@ -24,7 +24,7 @@ public class DataInitializer implements ApplicationRunner {
         }
 
         insertCustomers(1000);
-        insertProducts();
+        insertProducts(10000);
         insertOrders(100000);
         insertCarts(5000);
         System.out.println("더미 데이터 적재 완료!");
@@ -51,6 +51,21 @@ public class DataInitializer implements ApplicationRunner {
                 new Object[]{"아이패드", 1200000, 15},
                 new Object[]{"애플워치", 550000, 30}
         ));
+    }
+
+    private void insertProducts(int count) {
+        String sql = "INSERT INTO products (name, description, price, stock_quantity, category_id) VALUES (?, ?, ?, ?, ?)";
+        List<Object[]> batchArgs = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            batchArgs.add(new Object[]{
+                    "상품" + i,
+                    "설명" + i,
+                    random.nextInt(5000000) + 10000,
+                    random.nextInt(100) + 1,
+                    random.nextInt(5) + 1
+            });
+        }
+        jdbcTemplate.batchUpdate(sql, batchArgs);
     }
 
     private void insertOrders(int count) {
