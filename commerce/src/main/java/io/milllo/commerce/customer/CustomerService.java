@@ -33,6 +33,18 @@ public class CustomerService {
         return customerRepository.findInactiveCustomers();
     }
 
+    public List<CustomerResponseDto> reportActiveCustomers() {
+        return customerRepository.reportFromActiveCustomer();
+    }
+
+    public List<CustomerResponseDto> reportActiveCustomersFromExists() {
+        return customerRepository.reportFromActiveCustomerFromExists();
+    }
+
+    public List<CustomerResponseDto> reportActiveCustomersFromJoin() {
+        return customerRepository.reportFromActiveCustomerFromJoin();
+    }
+
     //UPDATE
     public void update(Customer customer) {
         findById(customer.getCustomerId()); // 존재여부 확인

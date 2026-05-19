@@ -50,6 +50,66 @@ public class CustomerRepository {
         return result.stream().findFirst();
     }
 
+    // READ
+    // 활성 고객 리포트 (EXISTS vs IN vs JOIN + DISTINCT)
+    // IN (최근 30일 내 PAID 주문 고객)
+    public List<CustomerResponseDto> reportFromActiveCustomer() {
+        String query = """
+                SELECT customer_id, name, email
+                FROM customers
+                WHERE customer_id IN (
+                    SELECT customer_id
+                    FROM orders
+                    WHERE status = 'PAID'
+                        AND order_date >= NOW() - INTERVAL 30 DAY
+                )
+                ORDER BY customer_id
+                """;
+        return jdbcTemplate.query(query, (rs, rowNum) -> new CustomerResponseDto(
+                rs.getInt("customer_id"),
+                rs.getString("name"),
+                rs.getString("email")
+        ));
+    }
+
+    // EXISTS
+    public List<CustomerResponseDto> reportFromActiveCustomerFromExists() {
+        String query = """
+                SELECT customer_id, name, email
+                FROM customers c
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM orders o
+                    WHERE o.customer_id = c.customer_id
+                        AND o.status = 'PAID'
+                        AND o.order_date >= NOW() - INTERVAL 30 DAY
+                )
+                ORDER BY customer_id
+                """;
+        return jdbcTemplate.query(query, (rs, rowNum) -> new CustomerResponseDto(
+                rs.getInt("customer_id"),
+                rs.getString("name"),
+                rs.getString("email")
+        ));
+    }
+
+    // JOIN + DISTINCT
+    public List<CustomerResponseDto> reportFromActiveCustomerFromJoin() {
+        String query = """
+                SELECT DISTINCT c.customer_id, c.name, c.email
+                FROM customers c
+                INNER JOIN orders o ON o.customer_id = c.customer_id
+                WHERE o.status = 'PAID'
+                    AND o.order_date >= NOW() - INTERVAL 30 DAY
+                ORDER BY c.customer_id
+                """;
+        return jdbcTemplate.query(query, (rs, rowNum) -> new CustomerResponseDto(
+           rs.getInt("customer_id"),
+           rs.getString("name"),
+           rs.getString("email")
+        ));
+    }
+
     // 장바구니에 담지 않은 고객 조회 (LEFT JOIN + IS NULL)
     public List<CustomerResponseDto> findInactiveCustomers() {
         String sql = """

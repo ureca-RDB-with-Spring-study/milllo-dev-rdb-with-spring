@@ -39,6 +39,21 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.findInactiveCustomers());
     }
 
+    @GetMapping("/report")
+    public ResponseEntity<List<CustomerResponseDto>> reportActiveCustomers() {
+        return ResponseEntity.ok(customerService.reportActiveCustomers());
+    }
+
+    @GetMapping("/report-exists")
+    public ResponseEntity<List<CustomerResponseDto>> reportActiveCustomersFromExists() {
+        return ResponseEntity.ok(customerService.reportActiveCustomersFromExists());
+    }
+
+    @GetMapping("/report-join")
+    public ResponseEntity<List<CustomerResponseDto>> reportActiveCustomersFromJoin() {
+        return ResponseEntity.ok(customerService.reportActiveCustomersFromJoin());
+    }
+
     //UPDATE
     @PutMapping("/{customerId}")
     public ResponseEntity<String> update(@PathVariable int customerId, @RequestBody Customer customer) {
